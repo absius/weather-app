@@ -15,10 +15,10 @@
     <div class="container" id="searchArea">
         <h1>What's the weather?</h1>
         <div class="input-group mb-3">
-            <input type="text" class="form-control" id="city_name" placeholder="Where do you want to go?"
+            <input type="text" class="form-control" id="location" placeholder="Enter City, State or ZipCode"
                 aria-label="city_name" aria-describedby="basic-addon2">
             <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button">Search</button>
+                <button class="btn btn-outline-secondary" onclick="getWeatherbyLocation()" type="button">Search</button>
             </div>
         </div>
     </div>
