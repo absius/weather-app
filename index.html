@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/style.css" />
+</head>
+
+<body>
+    <div class="container" id="searchArea">
+        <h1>What's the weather?</h1>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" id="city_name" placeholder="Where do you want to go?"
+                aria-label="city_name" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button">Search</button>
+            </div>
+        </div>
+    </div>
+    <div class="container" id="history">
+    </div>
+    <div class="container" id="city-info">
+    </div>
+    <div class="container" id="forecast">
+    </div>
+
+
+    <script src="assets/scripts.js"></script>
+</body>
+
+</html>
