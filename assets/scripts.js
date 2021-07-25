@@ -141,7 +141,7 @@ function getWeather(geocode) {
 
 function getLocationCityState(city, state, callback) {
   fetch(
-    "http://api.openweathermap.org/geo/1.0/direct?q=" +
+    "https://api.openweathermap.org/geo/1.0/direct?q=" +
       city +
       "," +
       state +
@@ -160,7 +160,7 @@ function getLocationCityState(city, state, callback) {
 
 function getLocationZip(zip, callback) {
   fetch(
-    "http://api.openweathermap.org/geo/1.0/zip?zip=" +
+    "https://api.openweathermap.org/geo/1.0/zip?zip=" +
       zip +
       ",US&appid=b9a648eb4d4c892d016c255f23ad0fb7"
   )
