@@ -4,7 +4,83 @@ var state = "";
 var geocode = {
   lat: 0,
   lon: 0,
+  city: "",
 };
+
+function saveToHistory(data) {
+  var historyDiv = document.getElementById("history");
+
+  var storageArray = JSON.parse(localStorage.getItem("history"));
+  if (!storageArray) {
+    storageArray = [];
+  }
+  var inHistory = false;
+  for (i = 0; i < storageArray.length; i++) {
+    if (
+      storageArray[i].lat === geocode.lat &&
+      storageArray[i].lon === geocode.lon
+    ) {
+      inHistory = true;
+    }
+  }
+  if (!inHistory) {
+    var button = document.createElement("button");
+    button.innerHTML = city.toUpperCase();
+    button.setAttribute("data-lon", geocode.lon);
+    button.setAttribute("data-lat", geocode.lat);
+    button.id = geocode.city;
+    button.setAttribute(
+      "onclick",
+      "getWeatherfromHistory(" +
+        geocode.lon +
+        "," +
+        geocode.lat +
+        ",'" +
+        geocode.city +
+        "')"
+    );
+    historyDiv.appendChild(button);
+    storageArray.push(geocode);
+    localStorage.setItem("history", JSON.stringify(storageArray));
+  }
+}
+
+function makeHistory() {
+  var historyDiv = document.getElementById("history");
+  historyDiv.innerHTML = "";
+
+  var storageArray = JSON.parse(localStorage.getItem("history"));
+  if (!storageArray) {
+    storageArray = [];
+  }
+
+  for (i = 0; i < storageArray.length; i++) {
+    var button = document.createElement("button");
+    button.innerHTML = storageArray[i].city.toUpperCase();
+    button.setAttribute("data-lon", storageArray[i].lon);
+    button.setAttribute("data-lat", storageArray[i].lat);
+    button.id = storageArray[i].city;
+    button.setAttribute(
+      "onclick",
+      "getWeatherfromHistory(" +
+        storageArray[i].lon +
+        "," +
+        storageArray[i].lat +
+        ",'" +
+        storageArray[i].city +
+        "')"
+    );
+    historyDiv.appendChild(button);
+  }
+}
+
+function getWeatherfromHistory(lon, lat, city) {
+  geocode.lat = lat;
+  geocode.lon = lon;
+  var button = document.getElementById(city);
+  geocode.city = button.id;
+  getWeather(geocode);
+}
 
 function getWeather(geocode) {
   fetch(
@@ -18,14 +94,11 @@ function getWeather(geocode) {
       return response.json();
     })
     .then(function (data) {
-      console.log(data);
-      var historyDiv = document.getElementById("history");
-      var button = document.createElement("button");
-      button.innerHTML = city.toUpperCase();
-      historyDiv.appendChild(button);
+      saveToHistory(data);
       var infoDiv = document.getElementById("city-info");
       var loc = document.createElement("h1");
-      loc.innerHTML = city.toUpperCase() + " " + moment().format("MM/DD/YYYY");
+      loc.innerHTML =
+        geocode.city.toUpperCase() + " </br>" + moment().format("MM/DD/YYYY");
       var temp = document.createElement("div");
       temp.innerHTML = "Temp: " + data.current.temp + " " + "&#176;F";
       var wind = document.createElement("div");
@@ -33,9 +106,23 @@ function getWeather(geocode) {
       var hum = document.createElement("div");
       hum.innerHTML = "Humidity: " + data.current.humidity + "%";
       var uvi = document.createElement("div");
+      if (data.current.uvi < 3) {
+        uvi.classList.add("favor");
+      } else if (data.current.uvi >= 3 && data.current.uvi < 8) {
+        uvi.classList.add("mod");
+      } else {
+        uvi.classList.add("severe");
+      }
       uvi.innerHTML = "UV Index: " + data.current.uvi;
+      var icon = document.createElement("img");
+      icon.src =
+        "http://openweathermap.org/img/wn/" +
+        data.current.weather[0].icon +
+        "@2x.png";
+      icon.alt = "weather_icon";
       infoDiv.innerHTML = "";
       infoDiv.appendChild(loc);
+      infoDiv.appendChild(icon);
       infoDiv.appendChild(temp);
       infoDiv.appendChild(wind);
       infoDiv.appendChild(hum);
@@ -58,6 +145,7 @@ function getLocationCityState(city, state, callback) {
     .then(function (data) {
       geocode.lat = data[0].lat;
       geocode.lon = data[0].lon;
+      geocode.city = city;
       callback(geocode);
     });
 }
@@ -74,6 +162,7 @@ function getLocationZip(zip, callback) {
     .then(function (data) {
       geocode.lat = data.lat;
       geocode.lon = data.lon;
+      geocode.city = data.name;
       city = data.name;
       callback(geocode);
     });
@@ -111,11 +200,20 @@ function getForecast(daily) {
     hum.innerHTML = "Humidity: " + daily[i + 1].humidity + "%";
     var uvi = document.createElement("p");
     uvi.classList.add("card-text");
+    if (daily[i + 1].uvi < 3) {
+      uvi.classList.add("favor");
+    } else if (daily[i + 1].uvi >= 3 && daily[i + 1].uvi < 8) {
+      uvi.classList.add("mod");
+    } else {
+      uvi.classList.add("severe");
+    }
+
     var icon = document.createElement("img");
     icon.src =
       "http://openweathermap.org/img/wn/" +
       daily[i + 1].weather[0].icon +
       "@2x.png";
+    icon.alt = "weather_icon";
     uvi.innerHTML = "UV Index: " + daily[i + 1].uvi;
     cardBody.appendChild(title);
     cardBody.appendChild(icon);
@@ -147,3 +245,5 @@ function getWeatherbyLocation() {
     });
   }
 }
+
+makeHistory();
