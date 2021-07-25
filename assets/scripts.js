@@ -94,6 +94,10 @@ function getWeather(geocode) {
       return response.json();
     })
     .then(function (data) {
+      if (!data.lat) {
+        alert("No results found for search criteria provided");
+        return;
+      }
       saveToHistory(data);
       var infoDiv = document.getElementById("city-info");
       var loc = document.createElement("h1");
