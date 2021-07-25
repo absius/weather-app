@@ -29,6 +29,8 @@ function saveToHistory(data) {
     button.setAttribute("data-lon", geocode.lon);
     button.setAttribute("data-lat", geocode.lat);
     button.id = geocode.city;
+    button.classList.add("btn");
+    button.classList.add("btn-secondary");
     button.setAttribute(
       "onclick",
       "getWeatherfromHistory(" +
@@ -59,6 +61,8 @@ function makeHistory() {
     button.innerHTML = storageArray[i].city.toUpperCase();
     button.setAttribute("data-lon", storageArray[i].lon);
     button.setAttribute("data-lat", storageArray[i].lat);
+    button.classList.add("btn");
+    button.classList.add("btn-secondary");
     button.id = storageArray[i].city;
     button.setAttribute(
       "onclick",
@@ -109,7 +113,7 @@ function getWeather(geocode) {
       wind.innerHTML = "Wind: " + data.current.wind_speed + " mph";
       var hum = document.createElement("div");
       hum.innerHTML = "Humidity: " + data.current.humidity + "%";
-      var uvi = document.createElement("div");
+      var uvi = document.createElement("span");
       if (data.current.uvi < 3) {
         uvi.classList.add("favor");
       } else if (data.current.uvi >= 3 && data.current.uvi < 8) {
@@ -176,9 +180,11 @@ function getForecast(daily) {
   var cardDiv = document.getElementById("forecast");
   var h2 = document.createElement("h2");
   h2.innerHTML = "5 Day Forecast";
-
+  var row = document.createElement("div");
+  row.classList.add("row");
   cardDiv.innerHTML = "";
   cardDiv.appendChild(h2);
+  cardDiv.appendChild(row);
   var date = moment().format("MM/DD/YYYY");
   for (var i = 0; i < 5; i++) {
     var card = document.createElement("div");
@@ -202,7 +208,7 @@ function getForecast(daily) {
     var hum = document.createElement("p");
     hum.classList.add("card-text");
     hum.innerHTML = "Humidity: " + daily[i + 1].humidity + "%";
-    var uvi = document.createElement("p");
+    var uvi = document.createElement("span");
     uvi.classList.add("card-text");
     if (daily[i + 1].uvi < 3) {
       uvi.classList.add("favor");
@@ -227,7 +233,7 @@ function getForecast(daily) {
     cardBody.appendChild(uvi);
     card.appendChild(cardBody);
     card.appendChild(img);
-    cardDiv.appendChild(card);
+    row.appendChild(card);
   }
 }
 
@@ -256,4 +262,10 @@ function getWeatherbyLocation() {
   }
 }
 
+document.getElementById("location").addEventListener("keyup", function (event) {
+  event.preventDefault();
+  if (event.keyCode === 13) {
+    document.getElementById("search").click();
+  }
+});
 makeHistory();
