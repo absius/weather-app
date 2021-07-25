@@ -1,3 +1,4 @@
+
 # weather-app
 
 GIVEN a weather dashboard with form inputs
@@ -14,3 +15,7 @@ THEN I am again presented with current and future conditions for that city
 
 Site deployed at https://absius.github.io/weather-app/
 Repository for code https://github.com/absius/weather-app
+
+
+![weather-app-screen](https://user-images.githubusercontent.com/50057893/126916107-e75795cc-f1ca-4baf-9ee4-0094f49a9e0d.png)
+
