@@ -25,7 +25,7 @@ function getWeather(geocode) {
       historyDiv.appendChild(button);
       var infoDiv = document.getElementById("city-info");
       var loc = document.createElement("h1");
-      loc.innerHTML = city.toUpperCase();
+      loc.innerHTML = city.toUpperCase() + " " + moment().format("MM/DD/YYYY");
       var temp = document.createElement("div");
       temp.innerHTML = "Temp: " + data.current.temp + " " + "&#176;F";
       var wind = document.createElement("div");
@@ -40,6 +40,7 @@ function getWeather(geocode) {
       infoDiv.appendChild(wind);
       infoDiv.appendChild(hum);
       infoDiv.appendChild(uvi);
+      getForecast(data.daily);
     });
 }
 
@@ -76,6 +77,56 @@ function getLocationZip(zip, callback) {
       city = data.name;
       callback(geocode);
     });
+}
+
+function getForecast(daily) {
+  var cardDiv = document.getElementById("forecast");
+  var h2 = document.createElement("h2");
+  h2.innerHTML = "5 Day Forecast";
+
+  cardDiv.innerHTML = "";
+  cardDiv.appendChild(h2);
+  var date = moment().format("MM/DD/YYYY");
+  for (var i = 0; i < 5; i++) {
+    var card = document.createElement("div");
+    card.id = "card" + i;
+    card.classList.add("card");
+    var cardBody = document.createElement("div");
+    var img = document.createElement("img");
+    img.classList.add("card-img-top");
+    cardBody.classList.add("card-body");
+    var title = document.createElement("h5");
+    title.classList.add("card-title");
+    title.innerHTML = moment()
+      .add(i + 1, "days")
+      .format("MM/DD/YYYY");
+    var temp = document.createElement("p");
+    temp.classList.add("card-text");
+    temp.innerHTML = "Temp: " + daily[i + 1].temp.day + " " + "&#176;F";
+    var wind = document.createElement("p");
+    wind.classList.add("card-text");
+    wind.innerHTML = "Wind: " + daily[i + 1].wind_speed + " mph";
+    var hum = document.createElement("p");
+    hum.classList.add("card-text");
+    hum.innerHTML = "Humidity: " + daily[i + 1].humidity + "%";
+    var uvi = document.createElement("p");
+    uvi.classList.add("card-text");
+    var icon = document.createElement("img");
+    icon.src =
+      "http://openweathermap.org/img/wn/" +
+      daily[i + 1].weather[0].icon +
+      "@2x.png";
+    uvi.innerHTML = "UV Index: " + daily[i + 1].uvi;
+    cardBody.appendChild(title);
+    cardBody.appendChild(icon);
+    cardBody.appendChild(temp);
+    cardBody.appendChild(wind);
+    cardBody.appendChild(hum);
+    cardBody.appendChild(uvi);
+    card.appendChild(cardBody);
+    card.appendChild(img);
+    cardDiv.appendChild(card);
+  }
 }
 
 function getWeatherbyLocation() {
