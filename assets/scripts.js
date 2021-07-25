@@ -232,11 +232,17 @@ function getWeatherbyLocation() {
   state = "";
   var input = document.getElementById("location").value;
   if (!isNaN(input)) {
+    if (!input) {
+      alert("Please enter a value for City, ST or Zip");
+    }
     zip = input;
     getLocationZip(zip, function (results) {
       getWeather(results);
     });
   } else {
+    if (!input.includes(",")) {
+      alert("Please enter in format City, ST");
+    }
     var locArr = input.split(",");
     city = locArr[0].trim();
     state = locArr[1].trim();
