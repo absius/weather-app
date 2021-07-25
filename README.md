@@ -1,4 +1,4 @@
-![weather-app-screen](https://user-images.githubusercontent.com/50057893/126916094-e417da17-8824-4b3f-8cd3-ac5b7b3dc052.png)
+
 # weather-app
 
 GIVEN a weather dashboard with form inputs
